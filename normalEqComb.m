@@ -1,8 +1,13 @@
 function [ Z,numChol,numEq ] = normalEqComb( AtA,AtB,PassSet )
 % Solve normal equations using combinatorial grouping.
-% Although this function was originally adopted from the code of
-% "M. H. Van Benthem and M. R. Keenan, J. Chemometrics 2004; 18: 441-450",
-% important modifications were made to fix bugs.
+% Reference:
+%        M. H. Van Benthem and M. R. Keenan,
+%        Fast Algorithm for the Solution of Large-scale Non-negativity-constrained
+%        Least Squares Problems.
+%        J. Chemometrics, 18, pp. 441-450, 2004. 
+%
+% This function was originally adopted from above paper, but a few
+% important modifications have been made.
 %
 % Modified by Jingu Kim (jingu.kim@gmail.com)
 %             School of Computational Science and Engineering,
@@ -26,9 +31,7 @@ function [ Z,numChol,numEq ] = normalEqComb( AtA,AtB,PassSet )
 	else
         Z = zeros(size(AtB));
         [n,k1] = size(PassSet);
-
-        %% Fixed on Aug-12-2009
-        if k1==1
+        if k1==1 % Treat a case with a single righthand side seperately
 			if any(PassSet)>0
             	Z(PassSet)=AtA(PassSet,PassSet)\AtB(PassSet); 
 				numChol = 1; numEq = 1;
@@ -36,18 +39,10 @@ function [ Z,numChol,numEq ] = normalEqComb( AtA,AtB,PassSet )
 				numChol = 0; numEq = 0;
 			end
         else
-            %% Fixed on Aug-12-2009
-            % The following bug was identified by investigating a bug report by Hanseung Lee.
-            % codedPassSet = 2.^(n-1:-1:0)*PassSet;
-            % [sortedPassSet,sortIx] = sort(codedPassSet);
-            % breaks = diff(sortedPassSet);
-            % breakIx = [0 find(breaks) k1];
-
+            % Original function has limitations in the length of solution vector.
             [sortedPassSet,sortIx] = sortrows(PassSet');
             breaks = any(diff(sortedPassSet)');
             breakIx = [0 find(breaks) k1];
-
-            %% Modified on Mar-11-2011
 			% Skip columns with no passive sets
 			if any(sortedPassSet(1,:))==0;
 				startIx = 2;
@@ -56,11 +51,8 @@ function [ Z,numChol,numEq ] = normalEqComb( AtA,AtB,PassSet )
 			end
 			numChol = 0; 
 			numEq = k1-breakIx(startIx);
-
             for k=startIx:length(breakIx)-1
                 cols = sortIx(breakIx(k)+1:breakIx(k+1));
-				% Modified on Mar-13-2011
-                % vars = PassSet(:,sortIx(breakIx(k)+1));
                 vars = sortedPassSet(breakIx(k)+1,:)';
                 Z(vars,cols) = AtA(vars,vars)\AtB(vars,cols);
                 numChol = numChol + 1;
