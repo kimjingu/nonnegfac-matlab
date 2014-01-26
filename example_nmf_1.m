@@ -15,14 +15,14 @@ A = rand(m,n);
 
 algs = {'anls_bpp' 'anls_asgroup' 'anls_asgivens' 'als' 'mu' 'hals'};
 for i=1:length(algs)
-	[W,H,iter,REC]=nmf(A,k,'verbose',1,'method',algs{i});
+    [W,H,iter,REC]=nmf(A,k,'verbose',1,'method',algs{i});
 end
 
 algs = {'anls_bpp' 'anls_asgroup' 'anls_asgivens' 'als' 'mu' 'hals'};
 for i=1:length(algs)
-	% Frobenius norm regularization test
-	[W,H,iter,REC]=nmf(A,k,'tol',1e-3,'method',algs{i},'reg_w',[0.1 0],'reg_h',[0.8 0]);
-	% L1-norm regularization test
-	[W,H,iter,REC]=nmf(A,k,'tol',1e-3,'method',algs{i},'reg_w',[0.1 0],'reg_h',[0 0.8]);
+    % Frobenius norm regularization test
+    [W,H,iter,REC]=nmf(A,k,'tol',1e-3,'method',algs{i},'reg_w',[0.1 0],'reg_h',[0.8 0]);
+    % L1-norm regularization test
+    [W,H,iter,REC]=nmf(A,k,'tol',1e-3,'method',algs{i},'reg_w',[0.1 0],'reg_h',[0 0.8]);
 end
 

@@ -56,7 +56,7 @@ function [ X,Y,success,numChol,numEq ] = nnlsm_blockpivot( A, B, isInputProd, in
         Y = - AtB;
         PassiveSet = false(n,k);
         numChol = 0;
-		numEq = 0;
+        numEq = 0;
     else
         PassiveSet = (init > 0);
         [ X,numChol,numEq] = normalEqComb(AtA,AtB,PassiveSet);
@@ -106,7 +106,7 @@ function [ X,Y,success,numChol,numEq ] = nnlsm_blockpivot( A, B, isInputProd, in
         [ X(:,NotOptCols),tempChol,tempEq ] = normalEqComb(AtA,AtB(:,NotOptCols),PassiveSet(:,NotOptCols));
         numChol = numChol + tempChol;
         numEq = numEq + tempEq;
-        X(abs(X)<1e-12) = 0;			% One can uncomment this line for numerical stability.
+        X(abs(X)<1e-12) = 0;            % One can uncomment this line for numerical stability.
         Y(:,NotOptCols) = AtA * X(:,NotOptCols) - AtB(:,NotOptCols);
         Y(abs(Y)<1e-12) = 0;            % One can uncomment this line for numerical stability.
         

@@ -54,23 +54,23 @@ function [ X,Y,success,numChol,numEq ] = nnlsm_activeset( A, B, overwrite, isInp
     [n,k]=size(AtB);
     MAX_ITER = n*5;
     % set initial feasible solution
-	if overwrite
+    if overwrite
         [X,numChol,numEq] = normalEqComb(AtA,AtB);
         PassSet = (X > 0);
         NotOptSet = any(X<0);
-	elseif nargin>=5
+    elseif nargin>=5
         X = init;
-		X(X<0)=0;
+        X(X<0)=0;
         PassSet = (X > 0);
         NotOptSet = true(1,k);
         numChol = 0;
-		numEq = 0;
+        numEq = 0;
     else
         X = zeros(n,k);
         PassSet = false(n,k);
         NotOptSet = true(1,k);
         numChol = 0;
-		numEq = 0;
+        numEq = 0;
     end
     
     Y = zeros(n,k);

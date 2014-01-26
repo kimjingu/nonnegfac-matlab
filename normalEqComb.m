@@ -19,38 +19,38 @@ function [ Z,numChol,numEq ] = normalEqComb( AtA,AtB,PassSet )
 % numChol : number of unique cholesky decompositions done
 % numEqs : number of systems of linear equations solved
 
-	if isempty(AtB)
-		Z = [];
-		numChol = 0; numEq = 0;
-	elseif (nargin==2) || all(PassSet(:))
+    if isempty(AtB)
+        Z = [];
+        numChol = 0; numEq = 0;
+    elseif (nargin==2) || all(PassSet(:))
         Z = AtA\AtB;
         numChol = 1; numEq = size(AtB,2);
     elseif size(AtA,1) ==1
         Z = AtB/AtA;
         numChol = 1; numEq = size(AtB,2);
-	else
+    else
         Z = zeros(size(AtB));
         [n,k1] = size(PassSet);
         if k1==1 % Treat a case with a single righthand side seperately
-			if any(PassSet)>0
-            	Z(PassSet)=AtA(PassSet,PassSet)\AtB(PassSet); 
-				numChol = 1; numEq = 1;
-			else
-				numChol = 0; numEq = 0;
-			end
+            if any(PassSet)>0
+                Z(PassSet)=AtA(PassSet,PassSet)\AtB(PassSet); 
+                numChol = 1; numEq = 1;
+            else
+                numChol = 0; numEq = 0;
+            end
         else
             % Original function has limitations in the length of solution vector.
             [sortedPassSet,sortIx] = sortrows(PassSet');
             breaks = any(diff(sortedPassSet)');
             breakIx = [0 find(breaks) k1];
-			% Skip columns with no passive sets
-			if any(sortedPassSet(1,:))==0;
-				startIx = 2;
-			else
-				startIx = 1;
-			end
-			numChol = 0; 
-			numEq = k1-breakIx(startIx);
+            % Skip columns with no passive sets
+            if any(sortedPassSet(1,:))==0;
+                startIx = 2;
+            else
+                startIx = 1;
+            end
+            numChol = 0; 
+            numEq = k1-breakIx(startIx);
             for k=startIx:length(breakIx)-1
                 cols = sortIx(breakIx(k)+1:breakIx(k+1));
                 vars = sortedPassSet(breakIx(k)+1,:)';
