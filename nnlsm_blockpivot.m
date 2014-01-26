@@ -12,10 +12,9 @@
 %            School of Computational Science and Engineering,
 %            Georgia Institute of Technology
 %
-% Check updated code at https://sites.google.com/site/jingukim/
+% Note that this algorithm assumes that the input matrix A has full column rank.
+% This code comes with no guarantee or warranty of any kind. 
 % Please send bug reports, comments, or questions to Jingu Kim.
-% This code comes with no guarantee or warranty of any kind. Note that this algorithm assumes that the
-%      input matrix A has full column rank.
 %
 % Modified Feb-20-2009
 % Modified Mar-13-2011: numChol and numEq
