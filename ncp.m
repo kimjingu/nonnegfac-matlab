@@ -216,10 +216,10 @@ function [F,iter,REC]=ncp(X,r,varargin)
 
     display(final);
 end
+
 %----------------------------------------------------------------------------------------------
 %                                    Utility Functions 
 %----------------------------------------------------------------------------------------------
-
 function ver = prepareHIS(ver,X,F,F_kten,prev_F,pGrad,init,par,iter,elapsed)
 	ver(1).iter       		= iter;
 	ver.elapsed      		= elapsed;
@@ -296,7 +296,6 @@ function [F,par,val,ver] = anls_bpp_initializer(X,F,par,ver)
 		ver.(['numEq_',num2str(k)]) 	= 0;
 		ver.(['suc_',num2str(k)]) 		= 0;
 	end
-	%val = struct([]);
 	val.FF = cell(par.nWay,1);
 	for k=1:par.nWay
 		val.FF{k} = F{k}'*F{k};
@@ -313,7 +312,6 @@ function [F,val] = anls_bpp_iterSolver(X,F,iter,par,val)
         % Compute the inner-product matrix
         FF = ones(par.r,par.r);
         for i = ways
-            %FF = FF .* (F{i}'*F{i});
             FF = FF .* val.FF{i};
         end
 		[Fthis,temp,sucThis,numCholThis,numEqThis] = nnlsm_blockpivot(FF,XF',1,F{curWay}');
@@ -350,7 +348,6 @@ function [F,val] = anls_asgroup_iterSolver(X,F,iter,par,val)
         % Compute the inner-product matrix
         FF = ones(par.r,par.r);
         for i = ways
-            %FF = FF .* (F{i}'*F{i});
             FF = FF .* val.FF{i};
         end
 		ow = 0;
@@ -387,7 +384,6 @@ function [F,val] = mu_iterSolver(X,F,iter,par,val)
         % Compute the inner-product matrix
         FF = ones(par.r,par.r);
         for i = ways
-            %FF = FF .* (F{i}'*F{i});
             FF = FF .* val.FF{i};
         end
 		F{curWay} = F{curWay}.*XF./(F{curWay}*FF+epsilon);
@@ -400,7 +396,6 @@ end
 
 %----------------------------------------------------------------------------------------------
 function [F,par,val,ver] = hals_initializer(X,F,par,ver)
-
 	% normalize
 	d = ones(1,par.r);
 	for k=1:par.nWay-1
@@ -432,11 +427,8 @@ function [F,val] = hals_iterSolver(X,F,iter,par,val)
         % Compute the inner-product matrix
         FF = ones(par.r,par.r);
         for i = ways
-            %FF = FF .* (F{i}'*F{i});
             FF = FF .* val.FF{i};
         end
-
-		%F{curWay}(:,j) = max( (F{curWay}(:,j) * FF(j,j) + XF(:,j) - F{curWay} * FF(:,j))/FF(j,j),epsilon);
 		if k<par.nWay
 			for j = 1:par.r
 				F{curWay}(:,j) = max( d(j) * F{curWay}(:,j) + XF(:,j) - F{curWay} * FF(:,j),epsilon);
