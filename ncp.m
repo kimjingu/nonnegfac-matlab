@@ -21,8 +21,8 @@
 % Refer to the help manual of the toolbox for installation and basic usage.
 %
 % Reference:
-%      Fast Nonnegative Tensor Factorization with an Active-set-like Method.
 %      Jingu Kim and Haesun Park.
+%      Fast Nonnegative Tensor Factorization with an Active-set-like Method.
 %      In High-Performance Scientific Computing: Algorithms and Applications, Springer, 2012, pp. 311-326.
 %
 % Please send bug reports, comments, or questions to Jingu Kim.
@@ -285,7 +285,12 @@ function retVal = getStopCriterion(pGrad,init,par)
     retVal = sqrt(retVal)/init.nr_grad_all;
 end
 
-%----------------------------------------------------------------------------------------------
+% 'anls_bpp' : ANLS with Block Principal Pivoting Method 
+% Reference:
+%    Jingu Kim and Haesun Park.
+%    Fast Nonnegative Tensor Factorization with an Active-set-like Method.
+%    In High-Performance Scientific Computing: Algorithms and Applications, 
+%    Springer, 2012, pp. 311-326.
 function [F,par,val,ver] = anls_bpp_initializer(X,F,par,ver)
     F{par.orderWays(1)} = zeros(size(F{par.orderWays(1)}));
 
@@ -333,7 +338,12 @@ function [ver] = anls_bpp_iterLogger(ver,par,val,F,prev_F)
     end
 end
 
-%----------------------------------------------------------------------------------------------
+% 'anls_asgroup' : ANLS with Active Set Method and Column Grouping
+% Reference:
+%    Kim, H. and Park, H. and Elden, L.
+%    Non-negative Tensor Factorization Based on Alternating Large-scale Non-negativity-constrained Least Squares.
+%    In Proceedings of IEEE 7th International Conference on Bioinformatics and Bioengineering 
+%    (BIBE07), 2, pp. 1147-1151,2007
 function [F,par,val,ver] = anls_asgroup_initializer(X,F,par,ver)
     [F,par,val,ver] = anls_bpp_initializer(X,F,par,ver);
 end
@@ -364,7 +374,11 @@ function [ver] = anls_asgroup_iterLogger(ver,par,val,F,prev_F)
     ver = anls_bpp_iterLogger(ver,par,val,F,prev_F);
 end
 
-%----------------------------------------------------------------------------------------------
+% 'mu' : Multiplicative Updating Method
+% Reference:
+%    M. Welling and M. Weber.
+%    Positive tensor factorization.
+%    Pattern Recognition Letters, 22(12), pp. 1255–1261, 2001.
 function [F,par,val,ver] = mu_initializer(X,F,par,ver)
     val.FF = cell(par.nWay,1);
     for k=1:par.nWay
@@ -394,7 +408,11 @@ end
 function [ver] = mu_iterLogger(ver,par,val,F,prev_F)
 end
 
-%----------------------------------------------------------------------------------------------
+% 'hals' : Hierarchical Alternating Least Squares Method
+% Reference:
+%    Cichocki, A. and Phan, A.H.
+%    Fast local algorithms for large scale nonnegative matrix and tensor factorizations.
+%    IEICE Trans. Fundam. Electron. Commun. Comput. Sci. E92-A(3), 708–721 (2009)
 function [F,par,val,ver] = hals_initializer(X,F,par,ver)
     % normalize
     d = ones(1,par.r);
