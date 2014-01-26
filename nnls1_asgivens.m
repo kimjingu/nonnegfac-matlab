@@ -1,5 +1,4 @@
 function [ x,y,success,iter ] = nnls1_asgivens( A,b,overwrite, isInputProd, init )
-%
 % Nonnegativity-constrained least squares for single righthand side : minimize |Ax-b|_2
 % Jingu Kim (jingu.kim@gmail.com)
 %
@@ -66,9 +65,7 @@ function [ x,y,success,iter ] = nnls1_asgivens( A,b,overwrite, isInputProd, init
             y( PassiveList) = 0;
             y( abs(y)<1e-12 ) = 0;              % One can uncomment this line for numerical stability.
 
-            %NonOptSet = find((y < 0) & ~PassiveSet);
             NonOptSet = find(y < 0);
-
             if isempty(NonOptSet), success=0;   % check optimality
             else
                 [minVal,minIx] = min(y);
