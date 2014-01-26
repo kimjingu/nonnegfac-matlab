@@ -15,7 +15,6 @@
 %               School of Computational Science and Engineering,
 %               Georgia Institute of Technology
 %
-% Check updated code at https://sites.google.com/site/jingukim/
 % Please send bug reports, comments, or questions to Jingu Kim.
 %
 % Updated Feb-20-2010
@@ -85,7 +84,6 @@ function [ X,Y,success,numChol,numEq ] = nnlsm_activeset( A, B, overwrite, isInp
         end
         
         % find unconstrained LS solution for the passive set
-        %Z = zeros(n,length(NotOptCols));
         [ Z,tempChol,tempEq ] = normalEqComb(AtA,AtB(:,NotOptCols),PassSet(:,NotOptCols));
         numChol = numChol + tempChol;
         numEq = numEq + tempEq;
@@ -100,7 +98,6 @@ function [ X,Y,success,numChol,numEq ] = nnlsm_activeset( A, B, overwrite, isInp
             ZInfea = Z(:,InfeaSubCols);
             InfeaCols = NotOptCols(InfeaSubCols);
             Alpha = zeros(n,length(InfeaSubCols));, Alpha(:) = Inf;
-            %InfeaSubSet(:,InfeaSubCols);
             [i,j] = find(InfeaSubSet(:,InfeaSubCols));
             InfeaSubIx = sub2ind(size(Alpha),i,j);
             if length(InfeaCols) == 1
