@@ -6,7 +6,7 @@ algorithms for computing nonnegative matrix and tensor factorizations.
 It consists of the following files.
 
 README.txt
-example_ncp_1.m
+example_ncp.m
 example_nmf_1.m
 example_nmf_2.m
 nmf.m
