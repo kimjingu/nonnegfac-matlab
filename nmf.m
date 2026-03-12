@@ -146,6 +146,10 @@ function [W,H,iter,REC]=nmf(A,k,varargin)
 
         tPrev = cputime;
     end
+    
+    if par.track_grad
+        initSC = getInitCriterion(par.stop_criterion,A,W,H,par);
+    end
 
     initializer= str2func([par.method,'_initializer']);
     iterSolver = str2func([par.method,'_iterSolver']);
@@ -163,9 +167,6 @@ function [W,H,iter,REC]=nmf(A,k,varargin)
     display(par);
 
     tStart = cputime;, tTotal = 0;
-    if par.track_grad
-        initSC = getInitCriterion(par.stop_criterion,A,W,H,par);
-    end
     SCconv = 0; SC_COUNT = 3;
 
     for iter=1:par.max_iter
